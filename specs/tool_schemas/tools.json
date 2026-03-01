@@ -1,0 +1,773 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Codin Tool Schemas",
+  "description": "Tool schemas for the Codin AI coding assistant. Each tool represents a capability the agent can perform.",
+  "type": "object",
+  "properties": {
+    "read_file": {
+      "description": "Read the contents of a file from the filesystem. Returns the full file content with line numbers. For large files, use offset/limit to paginate.",
+      "type": "object",
+      "properties": {
+        "path": {
+          "description": "Absolute or relative path to the file to read. Relative paths are resolved from the current working directory.",
+          "type": "string"
+        },
+        "offset": {
+          "description": "Line number to start reading from (1-indexed). Only provide for files too large to read at once.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "limit": {
+          "description": "Maximum number of lines to read. Only provide for files too large to read at once. Typical values: 100-500.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000
+        }
+      },
+      "required": ["path"]
+    },
+    "write_file": {
+      "description": "Write content to a file, creating it if it doesn't exist. Overwrites existing file contents completely. Use edit_file for partial changes.",
+      "type": "object",
+      "properties": {
+        "path": {
+          "description": "Absolute or relative path to the file to write. Parent directories will be created if needed.",
+          "type": "string"
+        },
+        "contents": {
+          "description": "The complete content to write to the file. This replaces all existing content.",
+          "type": "string"
+        },
+        "create_if_missing": {
+          "description": "Create the file and parent directories if they don't exist. Default: true.",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": ["path", "contents"]
+    },
+    "list_files": {
+      "description": "List files and directories at a given path. Returns names, types (file/dir), and sizes. Use for exploring directory structure.",
+      "type": "object",
+      "properties": {
+        "path": {
+          "description": "Directory path to list. Defaults to current working directory if not specified.",
+          "type": "string"
+        },
+        "recursive": {
+          "description": "List files recursively in all subdirectories. Default: false.",
+          "type": "boolean",
+          "default": false
+        },
+        "include_hidden": {
+          "description": "Include hidden files and directories (names starting with .). Default: false.",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": []
+    },
+    "grep": {
+      "description": "Search for regex patterns in file contents. Supports case-insensitive search, context lines, and result limiting. Faster than reading full files for pattern matching.\n\nExamples:\n- pattern='function foo' → find function definitions\n- pattern='TODO|FIXME' → find comments\n- pattern='import.*react' -i → find imports (case-insensitive)",
+      "type": "object",
+      "properties": {
+        "pattern": {
+          "description": "Regular expression pattern to search for in file contents. Uses regex syntax.",
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "description": "File or directory path to search in. Defaults to current working directory.",
+          "type": "string"
+        },
+        "recursive": {
+          "description": "Search recursively in subdirectories. Default: true when path is a directory.",
+          "type": "boolean",
+          "default": true
+        },
+        "include_hidden": {
+          "description": "Include hidden files in search. Default: false.",
+          "type": "boolean",
+          "default": false
+        },
+        "case_insensitive": {
+          "description": "Perform case-insensitive search. Default: false.",
+          "type": "boolean",
+          "default": false
+        },
+        "max_results": {
+          "description": "Maximum number of matches to return. Prevents excessive output. Default: 100.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000,
+          "default": 100
+        }
+      },
+      "required": ["pattern"]
+    },
+    "edit_file": {
+      "description": "Replace exact text in a file with new text. Use for precise edits when you know the exact content to replace. For multiple edits in one call, use multi_edit.\n\nExample:\n- old_string='const x = 1'\n- new_string='const x = 2'\n- replace_all=false → replaces first occurrence only",
+      "type": "object",
+      "properties": {
+        "path": {
+          "description": "Absolute or relative path to the file to edit.",
+          "type": "string"
+        },
+        "old_string": {
+          "description": "The exact text to replace. Must match exactly, including whitespace and indentation.",
+          "type": "string",
+          "minLength": 1
+        },
+        "new_string": {
+          "description": "The replacement text. Must be different from old_string.",
+          "type": "string"
+        },
+        "replace_all": {
+          "description": "Replace all occurrences of old_string in the file. Default: false (first occurrence only).",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": ["path", "old_string", "new_string"]
+    },
+    "multi_edit": {
+      "description": "Apply multiple edits across one or more files in a single atomic operation. All edits succeed or all fail together. Useful for coordinated changes across files.\n\nEach edit consists of:\n- path: file to modify\n- patch: unified diff format patch to apply\n\nIf commit_message is provided, a git commit will be created with the edits.",
+      "type": "object",
+      "properties": {
+        "edits": {
+          "description": "Array of edits to apply. Each edit is a file path with a patch in unified diff format.",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 50,
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "description": "Path to the file to modify.",
+                "type": "string"
+              },
+              "patch": {
+                "description": "Unified diff format patch to apply to the file.",
+                "type": "string"
+              }
+            },
+            "required": ["path", "patch"]
+          }
+        },
+        "commit_message": {
+          "description": "Optional git commit message. If provided, changes will be committed after successful edit.",
+          "type": "string",
+          "maxLength": 2000
+        }
+      },
+      "required": ["edits"]
+    },
+    "search_and_replace": {
+      "description": "Search for a pattern in a file and replace all occurrences. Supports regex patterns. More flexible than edit_file for pattern-based replacements.\n\nExample:\n- search_pattern='foo(bar)'\n- replace_pattern='baz$1'\n- use_regex=true → replaces 'foobar' with 'bazbar'",
+      "type": "object",
+      "properties": {
+        "path": {
+          "description": "Path to the file to perform search and replace in.",
+          "type": "string"
+        },
+        "search_pattern": {
+          "description": "Pattern to search for. Interpreted as regex if use_regex is true.",
+          "type": "string",
+          "minLength": 1
+        },
+        "replace_pattern": {
+          "description": "Replacement pattern. Use $1, $2 etc. for regex capture groups.",
+          "type": "string"
+        },
+        "use_regex": {
+          "description": "Interpret search_pattern as a regular expression. Default: true.",
+          "type": "boolean",
+          "default": true
+        },
+        "case_sensitive": {
+          "description": "Match case sensitively. Default: true. Set to false for case-insensitive replacement.",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": ["path", "search_pattern", "replace_pattern"]
+    },
+    "bash": {
+      "description": "Execute a shell command and return its output. Use for running git, package managers, build tools, and system commands.\n\nExamples:\n- command='git status' → show working tree status\n- command='npm install' → install dependencies\n- command='ls -la' → list files with details\n\nCommands run with a timeout. Long-running processes can be run in the background.",
+      "type": "object",
+      "properties": {
+        "command": {
+          "description": "The shell command to execute. Runs in the current working directory.",
+          "type": "string",
+          "minLength": 1
+        },
+        "timeout_seconds": {
+          "description": "Maximum time to wait for command completion, in seconds. Default: 120. Max: 600 (10 minutes).",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 600,
+          "default": 120
+        },
+        "description": {
+          "description": "Human-readable description of what this command does (5-15 words, active voice). Used for logging and permissions.",
+          "type": "string",
+          "maxLength": 200
+        }
+      },
+      "required": ["command"]
+    },
+    "git_status": {
+      "description": "Get the current git working tree status. Shows modified, added, deleted, and untracked files. Use to check repository state before making changes.",
+      "type": "object",
+      "properties": {
+        "working_directory": {
+          "description": "Path to the git repository. Defaults to current working directory.",
+          "type": "string"
+        }
+      },
+      "required": []
+    },
+    "git_diff": {
+      "description": "Get git diff output showing changes between commits, branches, or working tree. Use to review changes before committing.",
+      "type": "object",
+      "properties": {
+        "path": {
+          "description": "Optional file or directory path to get diff for. Shows all changes if not specified.",
+          "type": "string"
+        },
+        "staged": {
+          "description": "Show staged changes instead of working directory changes. Default: false.",
+          "type": "boolean",
+          "default": false
+        },
+        "cached": {
+          "description": "Alias for staged. Show changes in the index/staging area.",
+          "type": "boolean",
+          "default": false
+        },
+        "commit": {
+          "description": "Compare against a specific commit instead of HEAD.",
+          "type": "string"
+        }
+      },
+      "required": []
+    },
+    "todo_write": {
+      "description": "Manage the todo list for tracking task progress. Supports creating, updating, listing, and deleting todos. Use to break down complex tasks and show progress.\n\nOperations:\n- create: Create a new todo\n- update: Update an existing todo's content or status\n- bulk_create: Create multiple todos at once\n- list: List all todos\n- delete: Delete a todo\n\nStatus values: pending, in_progress, completed",
+      "type": "object",
+      "properties": {
+        "operation": {
+          "description": "The operation to perform on the todo list.",
+          "type": "string",
+          "enum": ["create", "update", "list", "delete", "bulk_create"]
+        },
+        "todos": {
+          "description": "Array of todos for bulk_create operation. Each todo must have content, status (default: pending), and optional activeForm.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "Unique identifier for the todo. Auto-generated if not provided.",
+                "type": "string"
+              },
+              "content": {
+                "description": "The todo item content in imperative form (e.g., 'Run the build' not 'Running the build').",
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 500
+              },
+              "status": {
+                "description": "Current status of the todo.",
+                "type": "string",
+                "enum": ["pending", "in_progress", "completed"],
+                "default": "pending"
+              },
+              "activeForm": {
+                "description": "Present continuous form for display while in progress (e.g., 'Running the build'). Auto-generated from content if not provided.",
+                "type": "string"
+              }
+            },
+            "required": ["content"]
+          }
+        },
+        "todo_id": {
+          "description": "ID of the todo to update or delete. Required for update and delete operations.",
+          "type": "string"
+        },
+        "content": {
+          "description": "New content for the todo. Used in update operation.",
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "description": "New status for the todo. Used in update operation.",
+          "type": "string",
+          "enum": ["pending", "in_progress", "completed"]
+        }
+      },
+      "required": ["operation"]
+    },
+    "task": {
+      "description": "Launch a sub-agent to handle a complex, multi-step task autonomously. The sub-agent has access to all tools and operates independently.\n\nUse the task tool when:\n- The work requires multiple steps and decisions\n- You need to search the codebase broadly\n- The task requires exploration before implementation\n\nDo NOT use for simple operations like reading a specific file or making a single edit.\n\nTask types:\n- explore: Fast codebase exploration and pattern finding\n- general-purpose: Complex multi-step tasks with full tool access\n- plan: Design implementation plans before coding\n- bash: Execute terminal commands\n\nThe task runs up to max_turns iterations. Output includes agent_id for resuming.",
+      "type": "object",
+      "properties": {
+        "description": {
+          "description": "A short (3-5 word) description of the task for tracking and logging.",
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 100
+        },
+        "prompt": {
+          "description": "The detailed task description for the sub-agent. Include context, requirements, and expected outcomes.",
+          "type": "string",
+          "minLength": 10
+        },
+        "subagent_type": {
+          "description": "The type of specialized agent to use for this task.",
+          "type": "string",
+          "enum": ["explore", "general-purpose", "plan", "bash", "claude-code-guide", "agents-design-experience:accessibility-specialist", "agents-design-experience:ui-ux-designer"],
+          "default": "general-purpose"
+        },
+        "model": {
+          "description": "Model to use for this agent. Defaults to inheriting from parent. Prefer haiku for quick tasks to minimize cost.",
+          "type": "string",
+          "enum": ["haiku", "sonnet", "opus"]
+        },
+        "max_turns": {
+          "description": "Maximum number of agent iterations (API round-trips) before stopping. Default: varies by subagent_type.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 500
+        },
+        "run_in_background": {
+          "description": "Run the agent in the background. Returns immediately with an output_file path to check results later.",
+          "type": "boolean",
+          "default": false
+        },
+        "resume": {
+          "description": "Agent ID to resume from. The agent will continue from its previous execution transcript.",
+          "type": "string"
+        }
+      },
+      "required": ["description", "prompt", "subagent_type"]
+    },
+    "copy_file": {
+      "description": "Copy a file or directory to a new location. Preserves file metadata and permissions.",
+      "type": "object",
+      "properties": {
+        "source": {
+          "description": "Source file or directory path to copy from.",
+          "type": "string",
+          "minLength": 1
+        },
+        "destination": {
+          "description": "Destination path where the copy will be created.",
+          "type": "string",
+          "minLength": 1
+        },
+        "recursive": {
+          "description": "Copy directories recursively. Required when source is a directory. Default: true.",
+          "type": "boolean",
+          "default": true
+        },
+        "overwrite": {
+          "description": "Overwrite the destination if it already exists. Default: false (fails if destination exists).",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": ["source", "destination"]
+    },
+    "move_file": {
+      "description": "Move or rename a file or directory. Can move across different filesystems. Use for renaming files or reorganizing directory structure.",
+      "type": "object",
+      "properties": {
+        "source": {
+          "description": "Current path of the file or directory to move.",
+          "type": "string",
+          "minLength": 1
+        },
+        "destination": {
+          "description": "New path for the file or directory.",
+          "type": "string",
+          "minLength": 1
+        },
+        "overwrite": {
+          "description": "Overwrite the destination if it already exists. Default: false (fails if destination exists).",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": ["source", "destination"]
+    },
+    "delete_file": {
+      "description": "Delete a file or directory. Use with caution - this operation cannot be undone. For directories, all contents will be removed.",
+      "type": "object",
+      "properties": {
+        "path": {
+          "description": "Path to the file or directory to delete.",
+          "type": "string",
+          "minLength": 1
+        },
+        "recursive": {
+          "description": "Delete directories and all their contents. Required for non-empty directories. Default: true.",
+          "type": "boolean",
+          "default": true
+        },
+        "force": {
+          "description": "Skip confirmation prompts and force deletion. Default: false.",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": ["path"]
+    },
+    "create_directory": {
+      "description": "Create a directory at the specified path. Can create parent directories as needed. Use to set up project structure.",
+      "type": "object",
+      "properties": {
+        "path": {
+          "description": "Directory path to create. Can be nested (e.g., 'src/components/buttons').",
+          "type": "string",
+          "minLength": 1
+        },
+        "parents": {
+          "description": "Create parent directories if they don't exist (like mkdir -p). Default: true.",
+          "type": "boolean",
+          "default": true
+        },
+        "exist_ok": {
+          "description": "Don't error if directory already exists. Default: true.",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": ["path"]
+    },
+    "compress": {
+      "description": "Compress files and directories into an archive. Supports multiple formats. Use for packaging code, creating backups, or preparing files for transfer.\n\nSupported formats: zip, tar, tar.gz (tgz), tar.bz2",
+      "type": "object",
+      "properties": {
+        "sources": {
+          "description": "List of file or directory paths to include in the archive.",
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1000,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "destination": {
+          "description": "Path where the archive will be created. Archive extension will be added if not included.",
+          "type": "string",
+          "minLength": 1
+        },
+        "format": {
+          "description": "Archive format to create.",
+          "type": "string",
+          "enum": ["zip", "tar", "tar.gz", "tar.bz2", "tgz"],
+          "default": "zip"
+        }
+      },
+      "required": ["sources", "destination"]
+    },
+    "extract": {
+      "description": "Extract files from an archive. Automatically detects archive format from the file extension. Supports zip, tar, tar.gz, tar.bz2.",
+      "type": "object",
+      "properties": {
+        "source": {
+          "description": "Path to the archive file to extract.",
+          "type": "string",
+          "minLength": 1
+        },
+        "destination": {
+          "description": "Directory where files will be extracted. Creates the directory if it doesn't exist.",
+          "type": "string"
+        },
+        "overwrite": {
+          "description": "Overwrite existing files in the destination directory. Default: false.",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "required": ["source"]
+    },
+    "rebuild_init": {
+      "description": "Initialize a new website rebuild session. Captures the source site and prepares for component extraction and code generation.\n\nThis is the first step in the rebuild pipeline. Returns a session_id that is used by subsequent rebuild tools to maintain session state.\n\nTarget stacks indicate the output technology:\n- static-html: Plain HTML/CSS\n- nextjs-tailwind: Next.js with Tailwind CSS\n- react-shadcn: React with shadcn/ui components\n\nThe session_id encapsulates all state including captured assets, extracted design tokens, and generated code.",
+      "type": "object",
+      "properties": {
+        "url": {
+          "description": "The URL of the website to rebuild. Must be publicly accessible.",
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https?://"
+        },
+        "target_stack": {
+          "description": "Target technology stack for the rebuild. Determines the output format and code generation strategy.",
+          "type": "string",
+          "enum": ["static-html", "nextjs-tailwind", "react-shadcn", "vue-tailwind", "svelte-tailwind"],
+          "default": "nextjs-tailwind"
+        },
+        "breakpoints": {
+          "description": "Breakpoint widths in pixels for responsive design capture. Default: [640, 768, 1024, 1280].",
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 320,
+            "maximum": 3840
+          },
+          "default": [640, 768, 1024, 1280]
+        },
+        "states": {
+          "description": "Component states to capture (e.g., ['hover', 'active', 'focus']). Default: all common states.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": ["default", "hover", "active", "focus", "disabled"]
+        },
+        "output_dir": {
+          "description": "Directory where rebuild output will be saved. Default: ./rebuild_output.",
+          "type": "string"
+        },
+        "session_id": {
+          "description": "Optional explicit session identifier. Auto-generated if not provided. Use this to track the rebuild session.",
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_-]+$"
+        },
+        "permission_confirmed": {
+          "description": "Must be set to true to proceed. Confirms you have permission to rebuild this website.",
+          "type": "boolean"
+        }
+      },
+      "required": ["url", "permission_confirmed"]
+    },
+    "capture_site": {
+      "description": "Capture the target website by downloading HTML, CSS, JavaScript, and assets. Creates screenshots at multiple breakpoints.\n\nThis is step 2 of the rebuild pipeline. The session_id from rebuild_init is required to maintain session context.\n\nOutput includes:\n- Downloaded and organized assets (CSS, JS, images)\n- Screenshots at configured breakpoints\n- DOM structure analysis\n- Linked resource discovery",
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "description": "The session identifier returned by rebuild_init. All rebuild tools use this to share state.",
+          "type": "string",
+          "minLength": 1
+        },
+        "fetch_css": {
+          "description": "Download and parse CSS files. Default: true.",
+          "type": "boolean",
+          "default": true
+        },
+        "fetch_js": {
+          "description": "Download JavaScript files. Default: true.",
+          "type": "boolean",
+          "default": true
+        },
+        "capture_screenshots": {
+          "description": "Capture screenshots at configured breakpoints. Default: true.",
+          "type": "boolean",
+          "default": true
+        },
+        "timeout_seconds": {
+          "description": "Maximum time to wait for page load, in seconds. Default: 30.",
+          "type": "integer",
+          "minimum": 5,
+          "maximum": 120,
+          "default": 30
+        }
+      },
+      "required": ["session_id"]
+    },
+    "extract_design_tokens": {
+      "description": "Extract design tokens from the captured site. Identifies colors, typography, spacing, shadows, and other design primitives.\n\nStep 3 of the rebuild pipeline. Design tokens are extracted to:\n- colors (palette, semantic colors)\n- typography (fonts, sizes, weights, line heights)\n- spacing (margins, padding, gaps)\n- shadows and borders\n- border radius values\n- animation durations and easing\n\nTokens are output in a structured format for use in code generation.",
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "description": "The session identifier returned by rebuild_init.",
+          "type": "string",
+          "minLength": 1
+        },
+        "output_format": {
+          "description": "Format for the extracted tokens.",
+          "type": "string",
+          "enum": ["json", "css-variables", "tailwind-config", "style-dictionary"],
+          "default": "json"
+        }
+      },
+      "required": ["session_id"]
+    },
+    "extract_component_map": {
+      "description": "Analyze the captured site to identify and map reusable components. Creates a component hierarchy with props and variations.\n\nStep 4 of the rebuild pipeline. Identifies:\n- Repeated UI patterns (buttons, cards, modals, etc.)\n- Component hierarchy and nesting\n- Variant patterns (primary/secondary buttons, etc.)\n- Layout components (grids, flex containers)\n- Interactive components (forms, carousels, tabs)\n\nOutput includes component names, descriptions, locations on page, and suggested props.",
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "description": "The session identifier returned by rebuild_init.",
+          "type": "string",
+          "minLength": 1
+        },
+        "min_confidence": {
+          "description": "Minimum confidence threshold for component detection (0.0 to 1.0). Default: 0.7.",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.7
+        }
+      },
+      "required": ["session_id"]
+    },
+    "harvest_assets": {
+      "description": "Download and organize all assets from the captured site. Optimize images and prepare fonts for use in the rebuilt site.\n\nStep 5 of the rebuild pipeline. Organizes assets into:\n- /images - optimized image assets\n- /fonts - web-font files\n- /icons - icon files and SVGs\n- /media - videos and other media\n\nImages are optimized for web. Fonts are converted to web formats (woff2). SVGs are cleaned and minified.",
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "description": "The session identifier returned by rebuild_init.",
+          "type": "string",
+          "minLength": 1
+        },
+        "include_images": {
+          "description": "Download and optimize image assets. Default: true.",
+          "type": "boolean",
+          "default": true
+        },
+        "include_fonts": {
+          "description": "Download and convert font files. Default: true.",
+          "type": "boolean",
+          "default": true
+        },
+        "include_css": {
+          "description": "Include CSS files in assets. Default: true.",
+          "type": "boolean",
+          "default": true
+        },
+        "include_js": {
+          "description": "Include JavaScript files in assets. Default: false.",
+          "type": "boolean",
+          "default": false
+        },
+        "optimize_images": {
+          "description": "Optimize images for web (compression, resizing). Default: true.",
+          "type": "boolean",
+          "default": true
+        },
+        "timeout_seconds": {
+          "description": "Timeout for downloading large assets, in seconds. Default: 60.",
+          "type": "integer",
+          "minimum": 10,
+          "maximum": 300,
+          "default": 60
+        }
+      },
+      "required": ["session_id"]
+    },
+    "generate_code": {
+      "description": "Generate code for the rebuilt site based on extracted design tokens, component map, and harvested assets.\n\nStep 6 of the rebuild pipeline. Creates:\n- Component files matching the target stack\n- Styling (CSS modules, Tailwind classes, or styled-components)\n- Page/layout files\n- Asset imports and references\n\nGenerated code follows best practices for the target stack and includes accessibility attributes.",
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "description": "The session identifier returned by rebuild_init.",
+          "type": "string",
+          "minLength": 1
+        },
+        "framework": {
+          "description": "Framework override for code generation. Uses target_stack from rebuild_init if not specified.",
+          "type": "string",
+          "enum": ["react", "vue", "svelte", "solid", "html"]
+        },
+        "styling": {
+          "description": "Styling approach for generated components.",
+          "type": "string",
+          "enum": ["tailwind", "css-modules", "styled-components", "vanilla-css"],
+          "default": "tailwind"
+        },
+        "include_tokens_css": {
+          "description": "Generate CSS variables for design tokens. Default: true.",
+          "type": "boolean",
+          "default": true
+        },
+        "accessibility": {
+          "description": "Accessibility level for generated code. Default: wcag-aa.",
+          "type": "string",
+          "enum": ["none", "basic", "wcag-aa", "wcag-aaa"],
+          "default": "wcag-aa"
+        }
+      },
+      "required": ["session_id"]
+    },
+    "visual_diff": {
+      "description": "Compare the rebuilt site against the original by taking screenshots and computing visual differences.\n\nStep 7 of the rebuild pipeline. Generates:\n- Side-by-side comparison images\n- Highlighted difference regions\n- Similarity score per component\n- Overall visual similarity percentage\n\nUse this to verify the rebuild accuracy before finalizing.",
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "description": "The session identifier returned by rebuild_init.",
+          "type": "string",
+          "minLength": 1
+        },
+        "threshold": {
+          "description": "Pixel difference threshold (0-255). Lower values detect more subtle differences. Default: 10.",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 255,
+          "default": 10
+        },
+        "breakpoints": {
+          "description": "Specific breakpoints to compare. Uses all configured breakpoints if not specified.",
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        }
+      },
+      "required": ["session_id"]
+    },
+    "auto_fix_pass": {
+      "description": "Automatically fix visual differences detected in the visual diff step. Makes adjustments to CSS, spacing, and alignment.\n\nStep 8 of the rebuild pipeline. Iteratively:\n1. Identifies components with low similarity scores\n2. Adjusts styles to match original\n3. Re-runs visual diff to verify\n4. Continues until max_fixes or target similarity reached\n\nFixes include: spacing, colors, font sizes, alignment, and layout adjustments.",
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "description": "The session identifier returned by rebuild_init.",
+          "type": "string",
+          "minLength": 1
+        },
+        "max_fixes": {
+          "description": "Maximum number of fix iterations to run. Default: 10.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 10
+        },
+        "target_similarity": {
+          "description": "Target visual similarity score (0.0 to 1.0). Stops when reached. Default: 0.95.",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.95
+        }
+      },
+      "required": ["session_id"]
+    },
+    "rebuild_finalize": {
+      "description": "Finalize the rebuild by generating a complete, deployable output bundle. Creates the final directory structure and generates documentation.\n\nFinal step of the rebuild pipeline. Produces:\n- Complete source code in target_stack format\n- Build configuration files\n- README with setup instructions\n- Component documentation\n- Asset directory\n\nAfter this step, the output can be deployed directly to a hosting service.",
+      "type": "object",
+      "properties": {
+        "session_id": {
+          "description": "The session identifier returned by rebuild_init.",
+          "type": "string",
+          "minLength": 1
+        },
+        "output_format": {
+          "description": "Output format for the final build.",
+          "type": "string",
+          "enum": ["source", "bundled", "docker"],
+          "default": "source"
+        },
+        "include_docs": {
+          "description": "Generate component documentation. Default: true.",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": ["session_id"]
+    }
+  },
+  "additionalProperties": false
+}

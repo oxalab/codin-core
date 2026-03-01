@@ -1,0 +1,73 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+.nuxt/
+.cache/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+bun.lockb
+
+# Testing
+coverage/
+.nyc_output/
+*.test.ts.snap
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Session and runtime data
+.sessions/
+sessions/
+*.session.json
+
+# Debug files
+debug/
+*.debug.json
+zai_debug.json
+zai_tool_calls.json
+
+# Agent artifacts
+test-agent.ts
+skills-/
+reference/
+
+# Claude Code
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+*.pid
+*.seed
+*.pid.lock
+.lock-wscript

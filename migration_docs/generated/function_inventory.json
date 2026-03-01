@@ -1,0 +1,805 @@
+{
+  "src/codin/agent/change_preview.py": {
+    "classes": [
+      "PendingChange",
+      "ChangeSet",
+      "ChangePreviewManager"
+    ],
+    "functions": []
+  },
+  "src/codin/agent/context_manager.py": {
+    "classes": [
+      "FileCacheEntry",
+      "ContextMetrics",
+      "ContextManager"
+    ],
+    "functions": []
+  },
+  "src/codin/agent/error_recovery.py": {
+    "classes": [
+      "RetryStrategy",
+      "RetryConfig",
+      "ErrorRecoveryManager"
+    ],
+    "functions": []
+  },
+  "src/codin/agent/llm_gateway.py": {
+    "classes": [
+      "LLMProvider",
+      "LLMConfig",
+      "LLMResponse",
+      "LLMGateway",
+      "AnthropicGateway",
+      "OpenAIGateway",
+      "OpenRouterGateway"
+    ],
+    "functions": [
+      {
+        "name": "create_llm_gateway",
+        "async": false,
+        "args": [
+          "config"
+        ]
+      }
+    ]
+  },
+  "src/codin/agent/loop.py": {
+    "classes": [
+      "AgentLoop"
+    ],
+    "functions": []
+  },
+  "src/codin/agent/orchestrator.py": {
+    "classes": [
+      "AgentOrchestrator"
+    ],
+    "functions": []
+  },
+  "src/codin/agent/permission_engine.py": {
+    "classes": [
+      "PermissionDecision",
+      "RiskLevel",
+      "PermissionRequest",
+      "PermissionEngine"
+    ],
+    "functions": []
+  },
+  "src/codin/agent/state.py": {
+    "classes": [
+      "MessageRole",
+      "Message",
+      "Todo",
+      "ToolExecution",
+      "PermissionRule",
+      "SessionState"
+    ],
+    "functions": []
+  },
+  "src/codin/agent/subagent.py": {
+    "classes": [
+      "SubAgentTaskType",
+      "SubAgentResult",
+      "SubAgent",
+      "SubAgentManager"
+    ],
+    "functions": []
+  },
+  "src/codin/agent/todo.py": {
+    "classes": [
+      "TodoManager"
+    ],
+    "functions": []
+  },
+  "src/codin/agent/tool_executor.py": {
+    "classes": [
+      "ToolExecutor"
+    ],
+    "functions": []
+  },
+  "src/codin/cli/cli.py": {
+    "classes": [],
+    "functions": [
+      {
+        "name": "print_message",
+        "async": false,
+        "args": [
+          "role",
+          "content"
+        ]
+      },
+      {
+        "name": "handle_permission_request",
+        "async": false,
+        "args": [
+          "request"
+        ]
+      },
+      {
+        "name": "handle_session_command",
+        "async": false,
+        "args": [
+          "orchestrator",
+          "command"
+        ]
+      },
+      {
+        "name": "handle_mode_command",
+        "async": false,
+        "args": [
+          "orchestrator",
+          "command"
+        ]
+      },
+      {
+        "name": "run_cli",
+        "async": true,
+        "args": [
+          "working_directory"
+        ]
+      },
+      {
+        "name": "main",
+        "async": false,
+        "args": []
+      }
+    ]
+  },
+  "src/codin/runtime/config_loader.py": {
+    "classes": [
+      "ConfigLoader"
+    ],
+    "functions": []
+  },
+  "src/codin/runtime/prompt_loader.py": {
+    "classes": [
+      "PromptLoader"
+    ],
+    "functions": []
+  },
+  "src/codin/runtime/session_persistence.py": {
+    "classes": [
+      "SessionEncoder",
+      "SessionMetadata",
+      "SessionPersistence"
+    ],
+    "functions": []
+  },
+  "src/codin/runtime/tool_schema_loader.py": {
+    "classes": [
+      "ToolSchemaLoader"
+    ],
+    "functions": []
+  },
+  "src/codin/tools/bash_runner.py": {
+    "classes": [],
+    "functions": [
+      {
+        "name": "bash_runner",
+        "async": true,
+        "args": [
+          "command",
+          "timeout_seconds",
+          "working_directory"
+        ]
+      }
+    ]
+  },
+  "src/codin/tools/compress.py": {
+    "classes": [],
+    "functions": [
+      {
+        "name": "compress",
+        "async": false,
+        "args": [
+          "sources",
+          "destination",
+          "format",
+          "working_directory"
+        ]
+      }
+    ]
+  },
+  "src/codin/tools/copy_file.py": {
+    "classes": [],
+    "functions": [
+      {
+        "name": "copy_file",
+        "async": false,
+        "args": [
+          "source",
+          "destination",
+          "recursive",
+          "overwrite",
+          "working_directory"
+        ]
+      }
+    ]
+  },
+  "src/codin/tools/create_directory.py": {
+    "classes": [],
+    "functions": [
+      {
+        "name": "create_directory",
+        "async": false,
+        "args": [
+          "path",
+          "parents",
+          "exist_ok",
+          "working_directory"
+        ]
+      }
+    ]
+  },
+  "src/codin/tools/delete_file.py": {
+    "classes": [],
+    "functions": [
+      {
+        "name": "delete_file",
+        "async": false,
+        "args": [
+          "path",
+          "recursive",
+          "force",
+          "working_directory"
+        ]
+      }
+    ]
+  },
+  "src/codin/tools/edit_file.py": {
+    "classes": [],
+    "functions": [
+      {
+        "name": "edit_file",
+        "async": false,
+        "args": [
+          "path",
+          "patch",
+          "working_directory"
+        ]
+      }
+    ]
+  },
+  "src/codin/tools/extract.py": {
+    "classes": [],
+    "functions": [
+      {
+        "name": "extract",
+        "async": false,
+        "args": [
+          "source",
+          "destination",
+          "overwrite",
+          "working_directory"
+        ]
+      }
+    ]
+  },
+  "src/codin/tools/git_tools.py": {
+    "classes": [],
+    "functions": [
+      {
+        "name": "git_status",
+        "async": true,
+        "args": [
+          "working_directory"
+        ]
+      },
+      {
+        "name": "git_diff",
+        "async": true,
+        "args": [
+          "path",
+          "working_directory"
+        ]
+      }
+    ]
+  },
+  "src/codin/tools/grep.py": {
+    "classes": [],
+    "functions": [
+      {
+        "name": "grep",
+        "async": false,
+        "args": [
+          "pattern",
+          "path",
+          "recursive",
+          "case_sensitive",
+          "working_directory"
+        ]
+      }
+    ]
+  },
+  "src/codin/tools/list_files.py": {
+    "classes": [],
+    "functions": [
+      {
+        "name": "list_files",
+        "async": false,
+        "args": [
+          "path",
+          "recursive",
+          "include_hidden",
+          "working_directory"
+        ]
+      }
+    ]
+  },
+  "src/codin/tools/move_file.py": {
+    "classes": [],
+    "functions": [
+      {
+        "name": "move_file",
+        "async": false,
+        "args": [
+          "source",
+          "destination",
+          "overwrite",
+          "working_directory"
+        ]
+      }
+    ]
+  },
+  "src/codin/tools/multi_edit.py": {
+    "classes": [],
+    "functions": [
+      {
+        "name": "multi_edit",
+        "async": false,
+        "args": [
+          "edits",
+          "commit_message",
+          "working_directory"
+        ]
+      }
+    ]
+  },
+  "src/codin/tools/read_file.py": {
+    "classes": [],
+    "functions": [
+      {
+        "name": "read_file",
+        "async": false,
+        "args": [
+          "path",
+          "working_directory"
+        ]
+      }
+    ]
+  },
+  "src/codin/tools/rebuild_mode.py": {
+    "classes": [
+      "_AssetHTMLParser"
+    ],
+    "functions": [
+      {
+        "name": "_safe_json_dump",
+        "async": false,
+        "args": [
+          "path",
+          "value"
+        ]
+      },
+      {
+        "name": "_safe_text_write",
+        "async": false,
+        "args": [
+          "path",
+          "content"
+        ]
+      },
+      {
+        "name": "_safe_read_json",
+        "async": false,
+        "args": [
+          "path"
+        ]
+      },
+      {
+        "name": "_now",
+        "async": false,
+        "args": []
+      },
+      {
+        "name": "_normalize_run_dir",
+        "async": false,
+        "args": [
+          "run_id",
+          "output_dir",
+          "working_directory"
+        ]
+      },
+      {
+        "name": "_manifest_path",
+        "async": false,
+        "args": [
+          "run_dir"
+        ]
+      },
+      {
+        "name": "_load_manifest",
+        "async": false,
+        "args": [
+          "run_dir"
+        ]
+      },
+      {
+        "name": "_update_manifest_step",
+        "async": false,
+        "args": [
+          "run_dir",
+          "step_name",
+          "payload"
+        ]
+      },
+      {
+        "name": "_http_get_text",
+        "async": false,
+        "args": [
+          "url",
+          "timeout_seconds"
+        ]
+      },
+      {
+        "name": "_http_get_bytes",
+        "async": false,
+        "args": [
+          "url",
+          "timeout_seconds"
+        ]
+      },
+      {
+        "name": "_extract_css_urls",
+        "async": false,
+        "args": [
+          "css_text"
+        ]
+      },
+      {
+        "name": "_extract_style_blocks",
+        "async": false,
+        "args": [
+          "html"
+        ]
+      },
+      {
+        "name": "_extract_linked_stylesheets",
+        "async": false,
+        "args": [
+          "html",
+          "base_url"
+        ]
+      },
+      {
+        "name": "_clean_url",
+        "async": false,
+        "args": [
+          "url",
+          "base_url"
+        ]
+      },
+      {
+        "name": "_asset_subdir",
+        "async": false,
+        "args": [
+          "kind"
+        ]
+      },
+      {
+        "name": "_infer_asset_kind",
+        "async": false,
+        "args": [
+          "url",
+          "tag"
+        ]
+      },
+      {
+        "name": "_filename_for_asset",
+        "async": false,
+        "args": [
+          "url",
+          "content_hash"
+        ]
+      },
+      {
+        "name": "rebuild_init",
+        "async": false,
+        "args": [
+          "url",
+          "target_stack",
+          "breakpoints",
+          "states",
+          "output_dir",
+          "run_id",
+          "permission_confirmed",
+          "working_directory"
+        ]
+      },
+      {
+        "name": "capture_site",
+        "async": false,
+        "args": [
+          "run_id",
+          "output_dir",
+          "timeout_seconds",
+          "fetch_css",
+          "fetch_js",
+          "working_directory"
+        ]
+      },
+      {
+        "name": "extract_design_tokens",
+        "async": false,
+        "args": [
+          "run_id",
+          "output_dir",
+          "working_directory"
+        ]
+      },
+      {
+        "name": "extract_component_map",
+        "async": false,
+        "args": [
+          "run_id",
+          "output_dir",
+          "working_directory"
+        ]
+      },
+      {
+        "name": "harvest_assets",
+        "async": false,
+        "args": [
+          "run_id",
+          "output_dir",
+          "include_images",
+          "include_fonts",
+          "include_css",
+          "include_js",
+          "timeout_seconds",
+          "working_directory"
+        ]
+      },
+      {
+        "name": "_rewrite_urls_with_asset_map",
+        "async": false,
+        "args": [
+          "html",
+          "url_map"
+        ]
+      },
+      {
+        "name": "_tokens_to_css",
+        "async": false,
+        "args": [
+          "tokens"
+        ]
+      },
+      {
+        "name": "generate_code",
+        "async": false,
+        "args": [
+          "run_id",
+          "output_dir",
+          "framework",
+          "include_tokens_css",
+          "working_directory"
+        ]
+      },
+      {
+        "name": "visual_diff",
+        "async": false,
+        "args": [
+          "run_id",
+          "output_dir",
+          "threshold",
+          "working_directory"
+        ]
+      },
+      {
+        "name": "auto_fix_pass",
+        "async": false,
+        "args": [
+          "run_id",
+          "output_dir",
+          "max_fixes",
+          "working_directory"
+        ]
+      },
+      {
+        "name": "rebuild_finalize",
+        "async": false,
+        "args": [
+          "run_id",
+          "output_dir",
+          "working_directory"
+        ]
+      }
+    ]
+  },
+  "src/codin/tools/search_and_replace.py": {
+    "classes": [],
+    "functions": [
+      {
+        "name": "search_and_replace",
+        "async": false,
+        "args": [
+          "path",
+          "search",
+          "replace",
+          "regex",
+          "case_sensitive",
+          "working_directory"
+        ]
+      }
+    ]
+  },
+  "src/codin/tools/task.py": {
+    "classes": [],
+    "functions": [
+      {
+        "name": "task",
+        "async": true,
+        "args": [
+          "task",
+          "context",
+          "task_type",
+          "subagent_manager"
+        ]
+      }
+    ]
+  },
+  "src/codin/tools/todo_write.py": {
+    "classes": [],
+    "functions": [
+      {
+        "name": "todo_write",
+        "async": false,
+        "args": [
+          "operation",
+          "todos",
+          "todo_id",
+          "content",
+          "status",
+          "assignee",
+          "state"
+        ]
+      }
+    ]
+  },
+  "src/codin/tools/write_file.py": {
+    "classes": [],
+    "functions": [
+      {
+        "name": "write_file",
+        "async": false,
+        "args": [
+          "path",
+          "contents",
+          "create_if_missing",
+          "working_directory"
+        ]
+      }
+    ]
+  },
+  "src/codin/tui/app.py": {
+    "classes": [
+      "Codin"
+    ],
+    "functions": [
+      {
+        "name": "main",
+        "async": false,
+        "args": []
+      }
+    ]
+  },
+  "src/codin/utils/diff_helpers.py": {
+    "classes": [],
+    "functions": [
+      {
+        "name": "generate_unified_diff",
+        "async": false,
+        "args": [
+          "old_lines",
+          "new_lines",
+          "file_path"
+        ]
+      },
+      {
+        "name": "apply_patch",
+        "async": false,
+        "args": [
+          "content",
+          "patch"
+        ]
+      },
+      {
+        "name": "compute_diff_preview",
+        "async": false,
+        "args": [
+          "old_content",
+          "new_content",
+          "max_lines"
+        ]
+      }
+    ]
+  },
+  "src/codin/utils/fs_helpers.py": {
+    "classes": [],
+    "functions": [
+      {
+        "name": "resolve_path",
+        "async": false,
+        "args": [
+          "path",
+          "working_directory"
+        ]
+      },
+      {
+        "name": "ensure_parent_dir",
+        "async": false,
+        "args": [
+          "path"
+        ]
+      },
+      {
+        "name": "is_safe_path",
+        "async": false,
+        "args": [
+          "path",
+          "working_directory"
+        ]
+      }
+    ]
+  },
+  "src/codin/tui/overlays/command_palette.py": {
+    "classes": [
+      "CommandPallete"
+    ],
+    "functions": []
+  },
+  "src/codin/tui/widgets/footer/footer.py": {
+    "classes": [
+      "Footer"
+    ],
+    "functions": []
+  },
+  "src/codin/tui/widgets/input/input.py": {
+    "classes": [
+      "ChatScreen"
+    ],
+    "functions": []
+  },
+  "src/codin/tui/widgets/input/sidebar.py": {
+    "classes": [
+      "Sidebar"
+    ],
+    "functions": []
+  },
+  "src/codin/tui/widgets/input/user_input.py": {
+    "classes": [
+      "UserInput"
+    ],
+    "functions": []
+  },
+  "src/codin/tui/widgets/models/model_option_list.py": {
+    "classes": [
+      "ModelSelected",
+      "ModelOptionList"
+    ],
+    "functions": []
+  },
+  "src/codin/tui/widgets/session/overlay.py": {
+    "classes": [
+      "SessionsOverlay"
+    ],
+    "functions": []
+  },
+  "src/codin/tui/widgets/welcome/welcome.py": {
+    "classes": [
+      "PromptSubmitted",
+      "WelcomeScreen"
+    ],
+    "functions": []
+  }
+}

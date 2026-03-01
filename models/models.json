@@ -1,0 +1,52 @@
+{
+  "qwen/qwen3-coder": {
+    "name": "qwen3-coder",
+    "provider": "qwen",
+    "description": "Code focused, fast"
+  },
+  "qwen/qwen-2.5-72b-instruct": {
+    "name": "qwen-2.5-72b",
+    "provider": "qwen",
+    "description": "Strong reasoning"
+  },
+  "google/gemma-3-27b-it": {
+    "name": "gemma-3-27b",
+    "provider": "google",
+    "description": "Free tier available"
+  },
+  "meta-llama/llama-3.3-8b-instruct": {
+    "name": "llama-3.3-8b",
+    "provider": "meta",
+    "description": "Free tier available"
+  },
+  "openai/gpt-4o-mini": {
+    "name": "gpt-4o-mini",
+    "provider": "openai",
+    "description": "Fast, cheap"
+  },
+  "openai/gpt-4o": {
+    "name": "gpt-4o",
+    "provider": "openai",
+    "description": "Balanced"
+  },
+  "anthropic/claude-3.5-sonnet": {
+    "name": "claude-3.5-sonnet",
+    "provider": "anthropic",
+    "description": "Strong all-rounder"
+  },
+  "anthropic/claude-3-haiku": {
+    "name": "claude-3-haiku",
+    "provider": "anthropic",
+    "description": "Fast, cheap"
+  },
+  "deepseek/deepseek-r1-0528:free": {
+    "name": "deepseek-r1",
+    "provider": "deepseek",
+    "description": "Reasoning model"
+  },
+  "microsoft/phi-4-mini-instruct": {
+    "name": "phi-4-mini",
+    "provider": "microsoft",
+    "description": "Fast, free tier"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "llm": {
+    "provider": "z.ai",
+    "model": "glm-4.7",
+    "api_key":"91864271140d47dc9ddc6c2efa69da00.RcwdHFSNnSHP1gVK",
+    "base_url": "https://api.z.ai/api/coding/paas/v4",
+    "temperature": 0.7,
+    "max_tokens": 8192
+  },
+  "working_directory": ".",
+  "minimal_tools": true
+}

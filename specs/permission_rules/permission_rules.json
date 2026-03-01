@@ -1,0 +1,22 @@
+{
+  "rules": [
+    {
+      "id": "allow-tests-write",
+      "tool": "write_file",
+      "path_glob": "tests/**",
+      "allow": true,
+      "description": "Allow test files to be created or updated"
+    },
+    {
+      "id": "deny-root-write",
+      "tool": "write_file",
+      "path_glob": "*",
+      "allow": false,
+      "description": "Default deny for all writes at repo root; require explicit user approval"
+    }
+  ],
+  "default": {
+    "allow": false,
+    "require_prompt": true
+  }
+}

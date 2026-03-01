@@ -1,0 +1,616 @@
+[
+  {
+    "tool": "read_file",
+    "impl": "read_file",
+    "impl_args": [
+      "path",
+      "working_directory"
+    ],
+    "schema_props": [
+      "path"
+    ],
+    "schema_required": [
+      "path"
+    ],
+    "missing_in_schema": [],
+    "missing_in_impl": [],
+    "required_not_in_impl": []
+  },
+  {
+    "tool": "write_file",
+    "impl": "write_file",
+    "impl_args": [
+      "path",
+      "contents",
+      "create_if_missing",
+      "working_directory"
+    ],
+    "schema_props": [
+      "contents",
+      "create_if_missing",
+      "path"
+    ],
+    "schema_required": [
+      "contents",
+      "path"
+    ],
+    "missing_in_schema": [],
+    "missing_in_impl": [],
+    "required_not_in_impl": []
+  },
+  {
+    "tool": "list_files",
+    "impl": "list_files",
+    "impl_args": [
+      "path",
+      "recursive",
+      "include_hidden",
+      "working_directory"
+    ],
+    "schema_props": [
+      "include_hidden",
+      "path",
+      "recursive"
+    ],
+    "schema_required": [],
+    "missing_in_schema": [],
+    "missing_in_impl": [],
+    "required_not_in_impl": []
+  },
+  {
+    "tool": "grep",
+    "impl": "grep",
+    "impl_args": [
+      "pattern",
+      "path",
+      "recursive",
+      "case_sensitive",
+      "working_directory"
+    ],
+    "schema_props": [
+      "case_insensitive",
+      "include_hidden",
+      "max_results",
+      "path",
+      "pattern",
+      "recursive"
+    ],
+    "schema_required": [
+      "pattern"
+    ],
+    "missing_in_schema": [
+      "case_sensitive"
+    ],
+    "missing_in_impl": [
+      "case_insensitive",
+      "include_hidden",
+      "max_results"
+    ],
+    "required_not_in_impl": []
+  },
+  {
+    "tool": "edit_file",
+    "impl": "edit_file",
+    "impl_args": [
+      "path",
+      "patch",
+      "working_directory"
+    ],
+    "schema_props": [
+      "new_string",
+      "old_string",
+      "path",
+      "replace_all"
+    ],
+    "schema_required": [
+      "new_string",
+      "old_string",
+      "path"
+    ],
+    "missing_in_schema": [
+      "patch"
+    ],
+    "missing_in_impl": [
+      "new_string",
+      "old_string",
+      "replace_all"
+    ],
+    "required_not_in_impl": [
+      "new_string",
+      "old_string"
+    ]
+  },
+  {
+    "tool": "multi_edit",
+    "impl": "multi_edit",
+    "impl_args": [
+      "edits",
+      "commit_message",
+      "working_directory"
+    ],
+    "schema_props": [
+      "commit_message",
+      "edits"
+    ],
+    "schema_required": [
+      "edits"
+    ],
+    "missing_in_schema": [],
+    "missing_in_impl": [],
+    "required_not_in_impl": []
+  },
+  {
+    "tool": "search_and_replace",
+    "impl": "search_and_replace",
+    "impl_args": [
+      "path",
+      "search",
+      "replace",
+      "regex",
+      "case_sensitive",
+      "working_directory"
+    ],
+    "schema_props": [
+      "path",
+      "replace_pattern",
+      "search_pattern",
+      "use_regex"
+    ],
+    "schema_required": [
+      "path",
+      "replace_pattern",
+      "search_pattern"
+    ],
+    "missing_in_schema": [
+      "case_sensitive",
+      "regex",
+      "replace",
+      "search"
+    ],
+    "missing_in_impl": [
+      "replace_pattern",
+      "search_pattern",
+      "use_regex"
+    ],
+    "required_not_in_impl": [
+      "replace_pattern",
+      "search_pattern"
+    ]
+  },
+  {
+    "tool": "bash",
+    "impl": "bash_runner",
+    "impl_args": [
+      "command",
+      "timeout_seconds",
+      "working_directory"
+    ],
+    "schema_props": [
+      "command",
+      "timeout_seconds"
+    ],
+    "schema_required": [
+      "command"
+    ],
+    "missing_in_schema": [],
+    "missing_in_impl": [],
+    "required_not_in_impl": []
+  },
+  {
+    "tool": "git_status",
+    "impl": "git_status",
+    "impl_args": [
+      "working_directory"
+    ],
+    "schema_props": [],
+    "schema_required": [],
+    "missing_in_schema": [],
+    "missing_in_impl": [],
+    "required_not_in_impl": []
+  },
+  {
+    "tool": "git_diff",
+    "impl": "git_diff",
+    "impl_args": [
+      "path",
+      "working_directory"
+    ],
+    "schema_props": [
+      "path",
+      "staged"
+    ],
+    "schema_required": [],
+    "missing_in_schema": [],
+    "missing_in_impl": [
+      "staged"
+    ],
+    "required_not_in_impl": []
+  },
+  {
+    "tool": "todo_write",
+    "impl": "todo_write",
+    "impl_args": [
+      "operation",
+      "todos",
+      "todo_id",
+      "content",
+      "status",
+      "assignee",
+      "state"
+    ],
+    "schema_props": [
+      "assignee",
+      "content",
+      "operation",
+      "state",
+      "status",
+      "todo_id",
+      "todos"
+    ],
+    "schema_required": [
+      "operation"
+    ],
+    "missing_in_schema": [],
+    "missing_in_impl": [],
+    "required_not_in_impl": []
+  },
+  {
+    "tool": "task",
+    "impl": "task",
+    "impl_args": [
+      "task",
+      "context",
+      "task_type",
+      "subagent_manager"
+    ],
+    "schema_props": [
+      "context",
+      "subagent_manager",
+      "task",
+      "task_type"
+    ],
+    "schema_required": [
+      "task"
+    ],
+    "missing_in_schema": [],
+    "missing_in_impl": [],
+    "required_not_in_impl": []
+  },
+  {
+    "tool": "copy_file",
+    "impl": "copy_file",
+    "impl_args": [
+      "source",
+      "destination",
+      "recursive",
+      "overwrite",
+      "working_directory"
+    ],
+    "schema_props": [
+      "destination",
+      "overwrite",
+      "recursive",
+      "source"
+    ],
+    "schema_required": [
+      "destination",
+      "source"
+    ],
+    "missing_in_schema": [],
+    "missing_in_impl": [],
+    "required_not_in_impl": []
+  },
+  {
+    "tool": "move_file",
+    "impl": "move_file",
+    "impl_args": [
+      "source",
+      "destination",
+      "overwrite",
+      "working_directory"
+    ],
+    "schema_props": [
+      "destination",
+      "overwrite",
+      "source"
+    ],
+    "schema_required": [
+      "destination",
+      "source"
+    ],
+    "missing_in_schema": [],
+    "missing_in_impl": [],
+    "required_not_in_impl": []
+  },
+  {
+    "tool": "delete_file",
+    "impl": "delete_file",
+    "impl_args": [
+      "path",
+      "recursive",
+      "force",
+      "working_directory"
+    ],
+    "schema_props": [
+      "force",
+      "path",
+      "recursive"
+    ],
+    "schema_required": [
+      "path"
+    ],
+    "missing_in_schema": [],
+    "missing_in_impl": [],
+    "required_not_in_impl": []
+  },
+  {
+    "tool": "create_directory",
+    "impl": "create_directory",
+    "impl_args": [
+      "path",
+      "parents",
+      "exist_ok",
+      "working_directory"
+    ],
+    "schema_props": [
+      "exist_ok",
+      "parents",
+      "path"
+    ],
+    "schema_required": [
+      "path"
+    ],
+    "missing_in_schema": [],
+    "missing_in_impl": [],
+    "required_not_in_impl": []
+  },
+  {
+    "tool": "compress",
+    "impl": "compress",
+    "impl_args": [
+      "sources",
+      "destination",
+      "format",
+      "working_directory"
+    ],
+    "schema_props": [
+      "destination",
+      "format",
+      "sources"
+    ],
+    "schema_required": [
+      "destination",
+      "sources"
+    ],
+    "missing_in_schema": [],
+    "missing_in_impl": [],
+    "required_not_in_impl": []
+  },
+  {
+    "tool": "extract",
+    "impl": "extract",
+    "impl_args": [
+      "source",
+      "destination",
+      "overwrite",
+      "working_directory"
+    ],
+    "schema_props": [
+      "destination",
+      "overwrite",
+      "source"
+    ],
+    "schema_required": [
+      "source"
+    ],
+    "missing_in_schema": [],
+    "missing_in_impl": [],
+    "required_not_in_impl": []
+  },
+  {
+    "tool": "rebuild_init",
+    "impl": "rebuild_init",
+    "impl_args": [
+      "url",
+      "target_stack",
+      "breakpoints",
+      "states",
+      "output_dir",
+      "run_id",
+      "permission_confirmed",
+      "working_directory"
+    ],
+    "schema_props": [
+      "breakpoints",
+      "output_dir",
+      "permission_confirmed",
+      "run_id",
+      "states",
+      "target_stack",
+      "url"
+    ],
+    "schema_required": [
+      "permission_confirmed",
+      "url"
+    ],
+    "missing_in_schema": [],
+    "missing_in_impl": [],
+    "required_not_in_impl": []
+  },
+  {
+    "tool": "capture_site",
+    "impl": "capture_site",
+    "impl_args": [
+      "run_id",
+      "output_dir",
+      "timeout_seconds",
+      "fetch_css",
+      "fetch_js",
+      "working_directory"
+    ],
+    "schema_props": [
+      "fetch_css",
+      "fetch_js",
+      "output_dir",
+      "run_id",
+      "timeout_seconds"
+    ],
+    "schema_required": [
+      "run_id"
+    ],
+    "missing_in_schema": [],
+    "missing_in_impl": [],
+    "required_not_in_impl": []
+  },
+  {
+    "tool": "extract_design_tokens",
+    "impl": "extract_design_tokens",
+    "impl_args": [
+      "run_id",
+      "output_dir",
+      "working_directory"
+    ],
+    "schema_props": [
+      "output_dir",
+      "run_id"
+    ],
+    "schema_required": [
+      "run_id"
+    ],
+    "missing_in_schema": [],
+    "missing_in_impl": [],
+    "required_not_in_impl": []
+  },
+  {
+    "tool": "extract_component_map",
+    "impl": "extract_component_map",
+    "impl_args": [
+      "run_id",
+      "output_dir",
+      "working_directory"
+    ],
+    "schema_props": [
+      "output_dir",
+      "run_id"
+    ],
+    "schema_required": [
+      "run_id"
+    ],
+    "missing_in_schema": [],
+    "missing_in_impl": [],
+    "required_not_in_impl": []
+  },
+  {
+    "tool": "harvest_assets",
+    "impl": "harvest_assets",
+    "impl_args": [
+      "run_id",
+      "output_dir",
+      "include_images",
+      "include_fonts",
+      "include_css",
+      "include_js",
+      "timeout_seconds",
+      "working_directory"
+    ],
+    "schema_props": [
+      "include_css",
+      "include_fonts",
+      "include_images",
+      "include_js",
+      "output_dir",
+      "run_id",
+      "timeout_seconds"
+    ],
+    "schema_required": [
+      "run_id"
+    ],
+    "missing_in_schema": [],
+    "missing_in_impl": [],
+    "required_not_in_impl": []
+  },
+  {
+    "tool": "generate_code",
+    "impl": "generate_code",
+    "impl_args": [
+      "run_id",
+      "output_dir",
+      "framework",
+      "include_tokens_css",
+      "working_directory"
+    ],
+    "schema_props": [
+      "framework",
+      "include_tokens_css",
+      "output_dir",
+      "run_id"
+    ],
+    "schema_required": [
+      "run_id"
+    ],
+    "missing_in_schema": [],
+    "missing_in_impl": [],
+    "required_not_in_impl": []
+  },
+  {
+    "tool": "visual_diff",
+    "impl": "visual_diff",
+    "impl_args": [
+      "run_id",
+      "output_dir",
+      "threshold",
+      "working_directory"
+    ],
+    "schema_props": [
+      "output_dir",
+      "run_id",
+      "threshold"
+    ],
+    "schema_required": [
+      "run_id"
+    ],
+    "missing_in_schema": [],
+    "missing_in_impl": [],
+    "required_not_in_impl": []
+  },
+  {
+    "tool": "auto_fix_pass",
+    "impl": "auto_fix_pass",
+    "impl_args": [
+      "run_id",
+      "output_dir",
+      "max_fixes",
+      "working_directory"
+    ],
+    "schema_props": [
+      "max_fixes",
+      "output_dir",
+      "run_id"
+    ],
+    "schema_required": [
+      "run_id"
+    ],
+    "missing_in_schema": [],
+    "missing_in_impl": [],
+    "required_not_in_impl": []
+  },
+  {
+    "tool": "rebuild_finalize",
+    "impl": "rebuild_finalize",
+    "impl_args": [
+      "run_id",
+      "output_dir",
+      "working_directory"
+    ],
+    "schema_props": [
+      "output_dir",
+      "run_id"
+    ],
+    "schema_required": [
+      "run_id"
+    ],
+    "missing_in_schema": [],
+    "missing_in_impl": [],
+    "required_not_in_impl": []
+  }
+]
