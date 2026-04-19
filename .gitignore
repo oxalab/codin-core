@@ -79,6 +79,5 @@ Thumbs.db
 .qoder/
 .windsurf/
 documentations/
-PRODUCTION_READINESS.md
-constants/50634b68-1f34-4dbb-96be-f1ba5a1dd09d_2368x1332.webp
-QUICK_START_CHECKLIST.md
+CLAUDE.md
+.agents/
